@@ -1,23 +1,22 @@
 #include <LedControl.h>
-  int DATAIN_1 = 12;
-  int CS = 11;
-  int CLK = 10;
-  
-  int amountMAX = 5;
+  const int DATAIN_1 = 12;
+  const int CS = 11;
+  const int CLK = 10;  
+  const int totalModules = 5;  
+
+  LedControl lc = LedControl(DATAIN_1,CLK,CS,totalModules);  
 
   int scrollSpeed = 20;
-
-  LedControl lc = LedControl(DATAIN_1,CLK,CS,amountMAX);  
   
 void setup() {  
-  for(int dev = 0; dev < amountMAX; dev++) {
+  for(int dev = 0; dev < totalModules; dev++) {
     lc.shutdown(dev,false); //wake up the MAX72XX from power-saving mode
     lc.setIntensity(dev,2);
   }
 }
 
 void loop() {
-  for(int dev = 0; dev < amountMAX; dev++) {
+  for(int dev = 0; dev < totalModules; dev++) {
     for(int x = 0; x < 8; x++) {      
       lc.setRow(dev,x,B11111111);
       if(x == 0)
