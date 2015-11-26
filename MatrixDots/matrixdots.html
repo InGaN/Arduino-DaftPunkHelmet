@@ -1,0 +1,143 @@
+<head>
+	<style>
+	body {
+		background-color:#EEEEEE;
+	}
+	#mainContainer {
+		margin: auto;
+		margin-top: 20px;
+	}
+	.matrixRow {
+		clear: both;
+	}
+	.matrixPanel {
+		margin: 2px;
+		float: left;
+		width:50px;
+		height:50px;
+		background-color:#666666;
+		border-radius: 15px;
+	}
+	
+	.matrixDot, .matrixDotActive {
+		margin: 5px;
+		width: 40px;
+		height: 40px;
+		border-radius: 40px;
+		background-color:#555555;
+	}
+	
+	.matrixDotActive {
+		background-color:#FF0000;
+	}
+	
+	#outputField {
+		clear: both;
+		margin-top: 10px;
+		width: 80%;
+	}
+	</style>
+	<script src="jquery-1.11.3.min.js"></script>	
+	<script>	
+	function updateOutput() {
+		var output = "B0101010";
+		$("#outputField").val("{" + output + "}");
+	}
+	$(document).ready(function(){		
+		$(".matrixPanel").click(function() {
+		  $(this).children().toggleClass("matrixDotActive");
+		  updateOutput();
+		});
+		
+		$("input[type='text']").on("click", function () {
+		   $(this).select();
+		});
+	});
+	</script>
+</head>
+
+<body>
+<div id="mainContainer">
+	<div class="matrixRow">
+		<div class="matrixPanel" id="0.0"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="0.1"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="0.2"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="0.3"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="0.4"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="0.5"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="0.6"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="0.7"><div class="matrixDot"></div></div>
+	</div>
+	<div class="matrixRow">
+		<div class="matrixPanel" id="1.0"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="1.1"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="1.2"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="1.3"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="1.4"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="1.5"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="1.6"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="1.7"><div class="matrixDot"></div></div>
+	</div>
+	<div class="matrixRow">
+		<div class="matrixPanel" id="2.0"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="2.1"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="2.2"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="2.3"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="2.4"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="2.5"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="2.6"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="2.7"><div class="matrixDot"></div></div>
+	</div>
+	<div class="matrixRow">
+		<div class="matrixPanel" id="3.0"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="3.1"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="3.2"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="3.3"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="3.4"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="3.5"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="3.6"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="3.7"><div class="matrixDot"></div></div>
+	</div>
+	<div class="matrixRow">
+		<div class="matrixPanel" id="4.0"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="4.1"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="4.2"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="4.3"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="4.4"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="4.5"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="4.6"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="4.7"><div class="matrixDot"></div></div>
+	</div>
+	<div class="matrixRow">
+		<div class="matrixPanel" id="5.0"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="5.1"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="5.2"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="5.3"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="5.4"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="5.5"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="5.6"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="5.7"><div class="matrixDot"></div></div>
+	</div>
+	<div class="matrixRow">
+		<div class="matrixPanel" id="6.0"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="6.1"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="6.2"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="6.3"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="6.4"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="6.5"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="6.6"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="6.7"><div class="matrixDot"></div></div>
+	</div>
+	<div class="matrixRow">
+		<div class="matrixPanel" id="7.0"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="7.1"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="7.2"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="7.3"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="7.4"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="7.5"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="7.6"><div class="matrixDot"></div></div>
+		<div class="matrixPanel" id="7.7"><div class="matrixDot"></div></div>
+	</div>
+	<input id="outputField" type="text"/>
+</div>
+</body>
