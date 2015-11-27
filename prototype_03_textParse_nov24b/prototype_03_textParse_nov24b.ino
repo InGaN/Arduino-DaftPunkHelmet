@@ -13,6 +13,7 @@
     {B01111110, B00010001, B00010001, B00010001, B01111110},// A
     {B01111111, B01001001, B01001001, B01001001, B00110110},// B
     {B00111110, B01000001, B01000001, B01000001, B00100010},// C
+    {B00000001, B00000010, B10011101, B11110010, B10000101}// D
   };
 
   byte data[3 *(5+charMargin)];
@@ -23,7 +24,7 @@ void setup() {
     lc.setIntensity(dev,2);
   }
   
-  parseStringToArray(data, "CBA", charMargin);
+  parseStringToArray(data, "DAB", charMargin);
 }
 
 void loop() {  

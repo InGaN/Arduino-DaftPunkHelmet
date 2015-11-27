@@ -52,15 +52,16 @@ return new Za.prototype.init(a,b,c,d,e)}m.Tween=Za,Za.prototype={constructor:Za,
 	<script>	
 	function updateOutput() {
 		var output = "byte myChar[] = {";		
+		var row = "";
 		$(".matrixPanel").each(function(index){
-			if(index%8 == 0) { output += "B"; }
 			if($(this).children().hasClass("matrixDotActive")) {
-				output += "1";
+				row = "1" + row;
 			}
 			else {
-				output += "0";
+				row = "0" + row;
 			}
-			if(index%8 == 7 && index != 63) { output += ", "; }
+			if(index%8 == 7 && index != 63) { output += ("B" + row + ", "); row = "";}
+			if(index == 63) { output += ("B" + row);}
 		});		
 		$("#outputField").val(output + "};");
 	}
@@ -70,8 +71,8 @@ return new Za.prototype.init(a,b,c,d,e)}m.Tween=Za,Za.prototype={constructor:Za,
 		  updateOutput();
 		});
 		
-		$("textarea").on("click", function () {
-		   $(this).select();
+		$("#selectAll").on("click", function () {
+		   //$("#outputField").select();
 		});
 	});
 	</script>
