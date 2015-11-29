@@ -5,11 +5,21 @@
   const int totalModules = 5;
 
   LedControl lc = LedControl(DATAIN_1,CLK,CS,totalModules);  
+
+  byte numArrays[][5] = {
+    {B00111110, B01000001, B01000001, B01000001, B00111110},// 0
+    {B00000000, B00000000, B00000000, B00000010, B01111111},// 1
+    {B01111001, B01001001, B01001001, B01001001, B01001111},// 2
+    {B01000001, B01001001, B01001001, B01001001, B01111111},// 3
+    {B00001111, B00001000, B00001000, B00001000, B01111111},// 4
+    {B01001111, B01001001, B01001001, B01001001, B01111001},// 5
+    {B01111111, B01001001, B01001001, B01001001, B01111001},// 6
+    {B00000001, B00000001, B01110001, B00001001, B00000111},// 7
+    {B01111111, B01001001, B01001001, B01001001, B01111111},// 8
+    {B01001111, B01001001, B01001001, B01001001, B01111111},// 9
+  };
   
-  int scrollSpeed = 20;
-  const int charMargin = 1;
- 
-  byte charArrays[][5] = {
+  byte charArrays[][5] = {     
     {B01111110, B00010001, B00010001, B00010001, B01111110},// A
     {B01111111, B01001001, B01001001, B01001001, B00110110},// B
     {B00111110, B01000001, B01000001, B01000001, B00100010},// C
@@ -38,22 +48,32 @@
     {B01100001, B01010001, B01001001, B01000101, B01000011},// Z
   };
 
-  byte data[6 *(5+charMargin)];
+  byte specialArrays[][5] {
+    {B00000000, B00000000, B01011111, B00000000, B00000000},// !
+    {B00000010, B00000001, B01010001, B00001001, B00000110},// ?
+    {B00000000, B00000000, B01000000, B00000000, B00000000},// .
+    {B00000000, B00000000, B00000000, B00000100, B00000011},// '
+  };  
     
 void setup() {  
   for(int dev = 0; dev < totalModules; dev++) {
     lc.shutdown(dev,false); //wake up the MAX72XX from power-saving mode
     lc.setIntensity(dev,2);
-  }
+  }  
+}
+
+void loop() {    
+  String text = "Hello World!";
+  text.toUpperCase();
+  int charMargin = 1; 
   
-  parseStringToArray(data, "SATOKO", charMargin);
+  byte data[text.length() *(5+charMargin)];
+  
+  parseStringToArray(data, text, charMargin);
+  scrollTextRight2Left(data, sizeof(data), 10);  
 }
 
-void loop() {  
-    scrollTextRight2Left(data, sizeof(data));  
-}
-
-void scrollTextRight2Left(byte input[], int charLength) {
+void scrollTextRight2Left(byte input[], int charLength, int scrollSpeed) {
   for(int shift = 0; shift < ((5*8) + charLength); shift++) {             
     for(int key = 0; key < charLength; key++) {
       if(getModule(shift-key) != -1)            
@@ -85,14 +105,32 @@ int getColumn(int shift) {
 
 void parseStringToArray(byte returnArray[], String input, int margin) {
   for(int character = 0; character < input.length(); character++) {
-    for(int column = 0; column < (5+margin); column++) {
+      for(int column = 0; column < (5+margin); column++) {
       if(column < 5) {
-        returnArray[(character*(5+margin)) + column] = charArrays[input[character]-65][column];
+        if(input[character] == 32) // space
+          returnArray[(character*(5+margin)) + column] = B00000000;
+        else if(input[character] == 33) // !
+          returnArray[(character*(5+margin)) + column] = specialArrays[0][column];
+        else if(input[character] == 63) // ?
+          returnArray[(character*(5+margin)) + column] = specialArrays[1][column];          
+        else if(input[character] == 46) // .
+          returnArray[(character*(5+margin)) + column] = specialArrays[2][column];
+        else if(input[character] == 39) // '
+          returnArray[(character*(5+margin)) + column] = specialArrays[3][column];
+          
+        else {
+          if(input[character] >= 48 && input[character] <= 57) {
+            returnArray[(character*(5+margin)) + column] = numArrays[input[character]-48][column];                       
+          }
+          else {
+            returnArray[(character*(5+margin)) + column] = charArrays[input[character]-65][column]; 
+          }          
+        }
       }
       else {
         returnArray[(character*(5+margin)) + column] = B00000000;      
       }
-    }
+    }        
   }
 }
 
