@@ -58,6 +58,10 @@
   byte equalizerArray[]{
     B10000000, B11000000, B11100000, B11110000, B11111000, B11111100, B11111110, B11111111
   };
+
+  byte scrambleArray[]{
+    B10101010, B01010101
+  };
     
 void setup() {  
   for(int dev = 0; dev < totalModules; dev++) {
@@ -67,7 +71,7 @@ void setup() {
 }
 
 void loop() {    
-  int animationType = 2;
+  int animationType = 3;
 
   String text = "Zalig kerstfeest en een vrolijk nieuwjaar!";
   text.toUpperCase();
@@ -86,9 +90,10 @@ void loop() {
     case 2:
       equalizerAnimation(10);
       break;
-  }
-  
-  
+    case 3:
+      scrambleAnimation(100);
+      break;
+  }  
 }
 
 void scrollTextRight2Left(byte input[], int charLength, int scrollSpeed) {
@@ -185,6 +190,27 @@ void equalizerAnimation(int scrollSpeed) {
     for(int x = 0; x < 8; x++) {  
       int idx = random(sizeof(equalizerArray));
       lc.setRow(dev,x,equalizerArray[idx]);        
+    }
+  }
+  delay(scrollSpeed);
+}
+
+void scrambleAnimation(int scrollSpeed) {
+  for(int dev = 0; dev < totalModules; dev++) {
+    for(int x = 0; x < 8; x++) {
+      if((x%2)==0)        
+        lc.setRow(dev,x,scrambleArray[0]);        
+      else
+        lc.setRow(dev,x,scrambleArray[1]);        
+    }
+  }
+  delay(scrollSpeed);
+  for(int dev = 0; dev < totalModules; dev++) {
+    for(int x = 0; x < 8; x++) {
+      if((x%2)==0)        
+        lc.setRow(dev,x,scrambleArray[1]);        
+      else
+        lc.setRow(dev,x,scrambleArray[0]);        
     }
   }
   delay(scrollSpeed);
