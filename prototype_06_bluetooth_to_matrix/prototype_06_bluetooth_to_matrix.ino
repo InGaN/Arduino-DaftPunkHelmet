@@ -3,6 +3,9 @@
   const int CS = 11;
   const int CLK = 10; 
   const int totalModules = 5;
+  
+  String text;
+  int animationType;
 
   LedControl lc = LedControl(DATAIN_1,CLK,CS,totalModules);  
 
@@ -68,32 +71,14 @@ void setup() {
     lc.shutdown(dev,false); //wake up the MAX72XX from power-saving mode
     lc.setIntensity(dev,2);
   }  
+  Serial.begin(38400); // read HC-05 module
 }
 
-void loop() {    
-  int animationType = 0;
-
-  String text = "piet en lente wensen u een Zalig kerstfeest en een gezond nieuwjaar!";
-  text.toUpperCase();
-  int charMargin = 1; 
+void loop() {  
+    
+  checkBlueTooth();
   
-  byte data[text.length() *(5+charMargin)];  
-  parseStringToArray(data, text, charMargin);
-
-  switch(animationType) {
-    case 0:
-      scrollTextRight2Left(data, sizeof(data), 10);
-      break;
-    case 1:
-      cylonAnimation(10);
-      break;
-    case 2:
-      equalizerAnimation(10);
-      break;
-    case 3:
-      scrambleAnimation(100);
-      break;
-  }  
+ 
 }
 
 void scrollTextRight2Left(byte input[], int charLength, int scrollSpeed) {
@@ -214,5 +199,53 @@ void scrambleAnimation(int scrollSpeed) {
     }
   }
   delay(scrollSpeed);
+}
+
+bool checkBlueTooth() {
+  if(Serial.available()) {
+    while(Serial.available()) {
+      delay(10); // buffer fill            
+      text = Serial.readString();    
+      Serial.println("7input: " + text); 
+
+      char x = text.charAt(0);
+
+      Serial.println("checking anim..."); 
+      if(x >= 48 && x <= 57 ) {
+        Serial.println("Setting anim...");
+         
+        animationType = x - 48;
+        Serial.println("Animation: " + animationType);
+
+        text.toUpperCase();
+        int charMargin = 1; 
+        
+        byte data[text.length() *(5+charMargin)];  
+        parseStringToArray(data, text, charMargin);
+      
+        switch(animationType) {
+          case 0:
+          default:
+            delay(10);
+            break;
+          case 1:
+            scrollTextRight2Left(data, sizeof(data), 10);
+            break;
+          case 2:
+            cylonAnimation(10);
+            break;
+          case 3:
+            equalizerAnimation(10);
+            break;
+          case 4:
+            scrambleAnimation(100);
+            break;
+        }  
+               
+      }
+    }
+    return 1;    
+  }
+  return 0;
 }
 
