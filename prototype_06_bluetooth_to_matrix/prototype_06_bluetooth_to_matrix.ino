@@ -77,11 +77,9 @@ void setup() {
   BlueToothSerial.begin(38400); // read HC-05 module
 }
 
-void loop() {  
-    
+void loop() {      
   checkBlueTooth();
-  
- 
+  playAnimation(); 
 }
 
 void scrollTextRight2Left(byte input[], int charLength, int scrollSpeed) {
@@ -204,50 +202,46 @@ void scrambleAnimation(int scrollSpeed) {
   delay(scrollSpeed);
 }
 
-bool checkBlueTooth() {
+void checkBlueTooth() {
   if(BlueToothSerial.available()) {
     while(BlueToothSerial.available()) {
       delay(10); // buffer fill            
-      text = BlueToothSerial.readString();    
-      BlueToothSerial.println("7input: " + text); 
-
-      char x = text.charAt(0);
-
-      BlueToothSerial.println("checking anim..."); 
-      if(x >= 48 && x <= 57 ) {
-        BlueToothSerial.println("Setting anim...");
-         
-        animationType = x - 48;
-        BlueToothSerial.println("Animation: " + animationType);
-
-        text.toUpperCase();
-        int charMargin = 1; 
-        
-        byte data[text.length() *(5+charMargin)];  
-        parseStringToArray(data, text, charMargin);
+      String input = BlueToothSerial.readString();    
       
-        switch(animationType) {
-          case 0:
-          default:
-            delay(10);
-            break;
-          case 1:
-            scrollTextRight2Left(data, sizeof(data), 10);
-            break;
-          case 2:
-            cylonAnimation(10);
-            break;
-          case 3:
-            equalizerAnimation(10);
-            break;
-          case 4:
-            scrambleAnimation(100);
-            break;
-        }                 
+      char x = input.charAt(0);
+      text = input.substring(1);
+      
+      if(x >= 48 && x <= 57 ) {
+        animationType = x - 48;                         
       }
-    }
-    return 1;    
+    }  
   }
-  return 0;
+}
+
+void playAnimation() {
+  text.toUpperCase();
+  int charMargin = 1; 
+  
+  byte data[text.length() *(5+charMargin)];  
+  parseStringToArray(data, text, charMargin);
+
+  switch(animationType) {
+    case 0:
+    default:
+      delay(10);
+      break;
+    case 1:
+      scrollTextRight2Left(data, sizeof(data), 10);
+      break;
+    case 2:
+      cylonAnimation(10);
+      break;
+    case 3:
+      equalizerAnimation(10);
+      break;
+    case 4:
+      scrambleAnimation(100);
+      break;
+  }
 }
 
