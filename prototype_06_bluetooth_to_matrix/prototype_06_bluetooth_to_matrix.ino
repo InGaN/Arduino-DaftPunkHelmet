@@ -1,4 +1,7 @@
 #include <LedControl.h>
+#include <SoftwareSerial.h>
+
+  SoftwareSerial BlueToothSerial(2, 3);
   const int DATAIN_1 = 12;
   const int CS = 11;
   const int CLK = 10; 
@@ -71,7 +74,7 @@ void setup() {
     lc.shutdown(dev,false); //wake up the MAX72XX from power-saving mode
     lc.setIntensity(dev,2);
   }  
-  Serial.begin(38400); // read HC-05 module
+  BlueToothSerial.begin(38400); // read HC-05 module
 }
 
 void loop() {  
@@ -202,20 +205,20 @@ void scrambleAnimation(int scrollSpeed) {
 }
 
 bool checkBlueTooth() {
-  if(Serial.available()) {
-    while(Serial.available()) {
+  if(BlueToothSerial.available()) {
+    while(BlueToothSerial.available()) {
       delay(10); // buffer fill            
-      text = Serial.readString();    
-      Serial.println("7input: " + text); 
+      text = BlueToothSerial.readString();    
+      BlueToothSerial.println("7input: " + text); 
 
       char x = text.charAt(0);
 
-      Serial.println("checking anim..."); 
+      BlueToothSerial.println("checking anim..."); 
       if(x >= 48 && x <= 57 ) {
-        Serial.println("Setting anim...");
+        BlueToothSerial.println("Setting anim...");
          
         animationType = x - 48;
-        Serial.println("Animation: " + animationType);
+        BlueToothSerial.println("Animation: " + animationType);
 
         text.toUpperCase();
         int charMargin = 1; 
@@ -240,8 +243,7 @@ bool checkBlueTooth() {
           case 4:
             scrambleAnimation(100);
             break;
-        }  
-               
+        }                 
       }
     }
     return 1;    
