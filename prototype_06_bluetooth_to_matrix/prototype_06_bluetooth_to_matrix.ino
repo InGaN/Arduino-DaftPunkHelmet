@@ -82,62 +82,73 @@ void loop() {
   playAnimation(); 
 }
 
-void scrollTextRight2Left(byte input[], int charLength, int scrollSpeed) {
+void scrollText(byte input[], int charLength, int scrollSpeed, bool Right2Left) {
   for(int shift = 0; shift < ((5*8) + charLength); shift++) {             
     for(int key = 0; key < charLength; key++) {
-      if(getModule(shift-key) != -1)            
-        lc.setRow(getModule(shift-key), getColumn(shift-key), input[key]);         
+      if(getModule(shift-key, Right2Left) != -1)            
+        lc.setRow(
+          getModule(shift-key, Right2Left), 
+          getColumn(shift-key, Right2Left), 
+          input[(Right2Left) ? key : (charLength - 1) - key]
+        );         
     }    
     delay(scrollSpeed);
   } 
 }
 
-int getModule(int shift) {
-  if(shift > 39)
-    return -1;
-  if(shift > 31)
-    return 0;
-  if(shift > 23)
-    return 1;
-  if(shift > 15)
-    return 2;
-  if(shift > 7)
-    return 3;
-  return 4;
+void showTextMiddle(byte input[], int charLength, int scrollSpeed) {
+  for(int key = 0; key < charLength; key++) {
+    //lc.setRow(getModule(key), getColumn(key), input[key]);   
+  }  
 }
 
-int getColumn(int shift) {
+int getModule(int shift, bool fromRight) {
+  if(shift > 39)
+    return (fromRight) ? -1 : -1;
+  if(shift > 31)
+    return (fromRight) ? 0 : 4;
+  if(shift > 23)
+    return (fromRight) ? 1 : 3;
+  if(shift > 15)
+    return (fromRight) ? 2 : 2;
+  if(shift > 7)
+    return (fromRight) ? 3 : 1;
+  return (fromRight) ? 4 : 0;
+}
+
+int getColumn(int shift, bool fromRight) {
   if(shift < 40 && shift >= 0) // prevents overlapping columns at start and end of matrices
-    return 7 - (shift%8);
+    return (fromRight) ? 7 - (shift%8) : 0 + (shift%8);
   return -1;
 }
 
 void parseStringToArray(byte returnArray[], String input, int margin) {
+  returnArray[0] = B00000000;
   for(int character = 0; character < input.length(); character++) {
       for(int column = 0; column < (5+margin); column++) {
       if(column < 5) {
         if(input[character] == 32) // space
-          returnArray[(character*(5+margin)) + column] = B00000000;
+          returnArray[1+(character*(5+margin)) + column] = B00000000;
         else if(input[character] == 33) // !
-          returnArray[(character*(5+margin)) + column] = specialArrays[0][column];
+          returnArray[1+(character*(5+margin)) + column] = specialArrays[0][column];
         else if(input[character] == 63) // ?
-          returnArray[(character*(5+margin)) + column] = specialArrays[1][column];          
+          returnArray[1+(character*(5+margin)) + column] = specialArrays[1][column];          
         else if(input[character] == 46) // .
-          returnArray[(character*(5+margin)) + column] = specialArrays[2][column];
+          returnArray[1+(character*(5+margin)) + column] = specialArrays[2][column];
         else if(input[character] == 39) // '
-          returnArray[(character*(5+margin)) + column] = specialArrays[3][column];
+          returnArray[1+(character*(5+margin)) + column] = specialArrays[3][column];
           
         else {
           if(input[character] >= 48 && input[character] <= 57) {
-            returnArray[(character*(5+margin)) + column] = numArrays[input[character]-48][column];                       
+            returnArray[1+(character*(5+margin)) + column] = numArrays[input[character]-48][column];                       
           }
           else {
-            returnArray[(character*(5+margin)) + column] = charArrays[input[character]-65][column]; 
+            returnArray[1+(character*(5+margin)) + column] = charArrays[input[character]-65][column]; 
           }          
         }
       }
       else {
-        returnArray[(character*(5+margin)) + column] = B00000000;      
+        returnArray[1+(character*(5+margin)) + column] = B00000000;      
       }
     }        
   }
@@ -222,7 +233,7 @@ void playAnimation() {
   text.toUpperCase();
   int charMargin = 1; 
   
-  byte data[text.length() *(5+charMargin)];  
+  byte data[1 + (text.length() *(5+charMargin))];  
   parseStringToArray(data, text, charMargin);
 
   switch(animationType) {
@@ -231,15 +242,19 @@ void playAnimation() {
       delay(10);
       break;
     case 1:
-      scrollTextRight2Left(data, sizeof(data), 10);
+      scrollText(data, sizeof(data), 10, 1);
       break;
     case 2:
-      cylonAnimation(10);
+      //showTextMiddle(data, sizeof(data), 10);
+      scrollText(data, sizeof(data), 10, 0);
       break;
     case 3:
-      equalizerAnimation(10);
+      cylonAnimation(10);
       break;
     case 4:
+      equalizerAnimation(10);
+      break;
+    case 5:
       scrambleAnimation(100);
       break;
   }
