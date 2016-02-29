@@ -104,6 +104,7 @@ int getColumn(int shift) {
 }
 
 void parseStringToArray(byte returnArray[], String input, int margin) {
+  returnArray[0] = B00000000;
   for(int character = 0; character < input.length(); character++) {
       for(int column = 0; column < (5+margin); column++) {
       if(column < 5) {

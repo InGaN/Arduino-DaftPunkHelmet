@@ -128,27 +128,30 @@ void parseStringToArray(byte returnArray[], String input, int margin) {
       for(int column = 0; column < (5+margin); column++) {
       if(column < 5) {
         if(input[character] == 32) // space
-          returnArray[1+(character*(5+margin)) + column] = B00000000;
+          returnArray[(character*(5+margin)) + column] = B00000000;
         else if(input[character] == 33) // !
-          returnArray[1+(character*(5+margin)) + column] = specialArrays[0][column];
+          returnArray[(character*(5+margin)) + column] = specialArrays[0][column];
         else if(input[character] == 63) // ?
-          returnArray[1+(character*(5+margin)) + column] = specialArrays[1][column];          
+          returnArray[(character*(5+margin)) + column] = specialArrays[1][column];          
         else if(input[character] == 46) // .
-          returnArray[1+(character*(5+margin)) + column] = specialArrays[2][column];
+          returnArray[(character*(5+margin)) + column] = specialArrays[2][column];
         else if(input[character] == 39) // '
-          returnArray[1+(character*(5+margin)) + column] = specialArrays[3][column];
+          returnArray[(character*(5+margin)) + column] = specialArrays[3][column];
           
         else {
           if(input[character] >= 48 && input[character] <= 57) {
-            returnArray[1+(character*(5+margin)) + column] = numArrays[input[character]-48][column];                       
+            returnArray[(character*(5+margin)) + column] = numArrays[input[character]-48][column];                       
+          }
+          else if(input[character] >= 65 && input[character] <= 90){
+            returnArray[(character*(5+margin)) + column] = charArrays[input[character]-65][column]; 
           }
           else {
-            returnArray[1+(character*(5+margin)) + column] = charArrays[input[character]-65][column]; 
-          }          
+            returnArray[(character*(5+margin)) + column] = B00000000;                
+          }
         }
       }
       else {
-        returnArray[1+(character*(5+margin)) + column] = B00000000;      
+        returnArray[(character*(5+margin)) + column] = B00000000;      
       }
     }        
   }

@@ -127,6 +127,7 @@ int getColumn(int shift) {
 }
 
 void parseStringToArray(byte returnArray[], String input, int margin) {
+  returnArray[0] = B00000000;
   for(int character = 0; character < input.length(); character++) {
       for(int column = 0; column < (5+margin); column++) {
       if(column < 5) {
@@ -145,9 +146,12 @@ void parseStringToArray(byte returnArray[], String input, int margin) {
           if(input[character] >= 48 && input[character] <= 57) {
             returnArray[(character*(5+margin)) + column] = numArrays[input[character]-48][column];                       
           }
-          else {
+          else if(input[character] >= 65 && input[character] <= 90){
             returnArray[(character*(5+margin)) + column] = charArrays[input[character]-65][column]; 
-          }          
+          }
+          else {
+            returnArray[(character*(5+margin)) + column] = B00000000;                
+          }
         }
       }
       else {
