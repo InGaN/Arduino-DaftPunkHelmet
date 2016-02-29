@@ -123,9 +123,12 @@ void parseStringToArray(byte returnArray[], String input, int margin) {
           if(input[character] >= 48 && input[character] <= 57) {
             returnArray[(character*(5+margin)) + column] = numArrays[input[character]-48][column];                       
           }
-          else {
+          else if(input[character] >= 65 && input[character] <= 90){
             returnArray[(character*(5+margin)) + column] = charArrays[input[character]-65][column]; 
-          }          
+          }
+          else {
+            returnArray[(character*(5+margin)) + column] = B00000000;                
+          }
         }
       }
       else {
